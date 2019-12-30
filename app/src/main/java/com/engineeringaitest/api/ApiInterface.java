@@ -7,9 +7,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
- * Interface for Retrofit to take input
+ * Interface for Retrofit
  */
 public interface ApiInterface {
+
     @GET("users")
-    Call<APIResponse> getList(@Query("offset") int pageNo, @Query("limit") int limit);
+    Call<APIResponse> getUserImageList(
+            @Query("offset") int offset,
+            @Query("limit") int limit);
 }

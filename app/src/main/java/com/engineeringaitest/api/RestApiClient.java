@@ -12,12 +12,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Rest Api Client for creating instance of Retrofit
+ * Rest Api Client for create/get instance of Retrofit
  */
 public class RestApiClient {
 
     private static Retrofit retrofit = null;
-    private static String BASE_URL = "http://sd2-hiring.herokuapp.com/api/";
+    private static final String BASE_URL = "http://sd2-hiring.herokuapp.com/api/";
+    private static final int TIMEOUT = 60 * 3;// minutes
 
     public static ApiInterface getApiInterface() {
         return createRetrofit().create(ApiInterface.class);
@@ -39,12 +40,12 @@ public class RestApiClient {
     @NonNull
     private static OkHttpClient.Builder getBuilder() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.connectTimeout((long)60 * 3, TimeUnit.SECONDS)
-                .readTimeout((long)60 * 3, TimeUnit.SECONDS)
-                .writeTimeout((long)60 * 3, TimeUnit.SECONDS);
-        // add logging interceptor for add log in log cat
+        httpClient.connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(TIMEOUT, TimeUnit.SECONDS);
+        // add logging interceptor for add logs.
         httpClient.addInterceptor(logging);
         return httpClient;
     }
