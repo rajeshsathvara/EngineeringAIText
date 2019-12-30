@@ -1,5 +1,6 @@
 package com.engineeringaitest.util;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -8,9 +9,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+
 import com.engineeringaitest.R;
 
-public class Util {
+public class Utils {
     private static Dialog dialog;
 
     //print Exception with exception value
@@ -18,18 +21,18 @@ public class Util {
         Log.e("!_@_TestExam:", value + "", e);
     }
 
-    public static boolean checkInternetConnection(Context context) {
+    public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    public static void showProgress(Context context, boolean cancellable) {
+    public static void startProgress(Context context, boolean cancellable) {
         if (context == null)
             return;
 
-        if (checkProgressOpen())
+        if (isLoading())
             return;
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_progress);
@@ -43,12 +46,12 @@ public class Util {
         }
     }
 
-    private static boolean checkProgressOpen() {
+    private static boolean isLoading() {
         return dialog != null && dialog.isShowing();
     }
 
-    public static void cancelProgress() {
-        if (checkProgressOpen()) {
+    public static void dismissProgress() {
+        if (isLoading()) {
             try {
                 dialog.dismiss();
             } catch (Exception e) {
@@ -56,5 +59,12 @@ public class Util {
             }
             dialog = null;
         }
+    }
+
+    public static void startGliderProgress(Activity mContext) {
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(mContext);
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
     }
 }

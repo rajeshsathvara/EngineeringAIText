@@ -3,6 +3,7 @@ package com.engineeringaitest.api;
 import androidx.annotation.NonNull;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -26,8 +27,7 @@ public class RestApiClient {
 
     private static Retrofit createRetrofit() {
         if (retrofit == null) {
-            OkHttpClient.Builder httpClient = getBuilder();
-            httpClient.protocols(Arrays.asList(Protocol.HTTP_1_1));
+            OkHttpClient.Builder httpClient = getBuilder().protocols(Collections.singletonList(Protocol.HTTP_1_1));
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())

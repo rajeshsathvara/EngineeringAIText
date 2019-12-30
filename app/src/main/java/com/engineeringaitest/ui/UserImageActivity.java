@@ -14,9 +14,9 @@ import com.engineeringaitest.R;
 import com.engineeringaitest.api.RestApiClient;
 import com.engineeringaitest.databinding.ActivityMainBinding;
 import com.engineeringaitest.model.APIResponse;
-import com.engineeringaitest.ui.adapter.UserListAdapter;
+import com.engineeringaitest.ui.adapter.ImageListAdapter;
 import com.engineeringaitest.util.EndLessRecyclerViewScrollListener;
-import com.engineeringaitest.util.Util;
+import com.engineeringaitest.util.Utils;
 
 import java.util.ArrayList;
 
@@ -24,52 +24,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class UserImageActivity extends AppCompatActivity {
 
-
-    private APIResponse apiResponse = null;
     private int offset = 0;
+    private APIResponse apiResponse = null;
 
     private ActivityMainBinding binding = null;
 
     private ArrayList<APIResponse.Data.Users> usersArrayList = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager = null;
     private EndLessRecyclerViewScrollListener rvScrollListener;
-    private UserListAdapter userListAdapter;
-
+    private ImageListAdapter userListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        init();
-    }
 
-    private void init() {
-        callGetUserListAPI();
-        swipeRefreshListener();
-        setRecyclerViewScrollListener();
-    }
-
-    private void setRecyclerViewScrollListener() {
-        rvScrollListener = new EndLessRecyclerViewScrollListener(getLayoutManger()) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                if (offset == 0) {
-                    removeLoadMore();
-                } else {
-                    if (Util.checkInternetConnection(getApplicationContext())) {
-                        callGetUserListAPI();
-                    } else {
-                        Util.cancelProgress();
-                        showToast(R.string.no_internet_connection);
-                    }
-                }
-            }
-        };
-    }
-
-    private void swipeRefreshListener() {
         binding.swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -78,24 +49,45 @@ public class MainActivity extends AppCompatActivity {
                 if (usersArrayList != null && usersArrayList.size() > 0) {
                     usersArrayList.clear();
                 }
-                callGetUserListAPI();
+                callApiForGetUserImageList();
             }
         });
+
+        callApiForGetUserImageList();
+        setScrollListener();
     }
 
-    private void callGetUserListAPI() {
+    private void setScrollListener() {
+        rvScrollListener = new EndLessRecyclerViewScrollListener(getLayoutManger()) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                if (offset == 0) {
+                    removeLoadMore();
+                } else {
+                    if (Utils.isNetworkAvailable(getApplicationContext())) {
+                        callApiForGetUserImageList();
+                    } else {
+                        Utils.dismissProgress();
+                        showToast(R.string.no_internet_connection);
+                    }
+                }
+            }
+        };
+    }
+
+    private void callApiForGetUserImageList() {
         if (offset > 1) {
             setFooterVisibility(View.VISIBLE);
         } else {
-            Util.showProgress(this, false);
+            Utils.startProgress(UserImageActivity.this, false);
         }
 
-        if (Util.checkInternetConnection(getApplicationContext())) {
+        if (Utils.isNetworkAvailable(UserImageActivity.this)) {
             Call<APIResponse> apiCall = RestApiClient.getApiInterface().getUserImageList(offset, 10);
             apiCall.enqueue(new Callback<APIResponse>() {
                 @Override
                 public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
-                    Util.cancelProgress();
+                    Utils.dismissProgress();
                     apiResponse = response.body();
                     removeLoadMore();
                     setUserAdapter();
@@ -103,18 +95,18 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<APIResponse> call, Throwable t) {
-                    Util.cancelProgress();
+                    Utils.dismissProgress();
                     removeLoadMore();
                 }
             });
         } else {
-            Util.cancelProgress();
+            Utils.dismissProgress();
             showToast(R.string.no_internet_connection);
         }
     }
 
     private void showToast(int message) {
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(UserImageActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void setUserAdapter() {
@@ -125,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 //First time list is empty to set the adapter
                 binding.rvUser.setLayoutManager(getLayoutManger());
 
-                userListAdapter = new UserListAdapter(this, usersArrayList);
+                userListAdapter = new ImageListAdapter(this, usersArrayList);
                 binding.rvUser.setAdapter(userListAdapter);
                 binding.rvUser.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
                 binding.rvUser.addOnScrollListener(rvScrollListener);
