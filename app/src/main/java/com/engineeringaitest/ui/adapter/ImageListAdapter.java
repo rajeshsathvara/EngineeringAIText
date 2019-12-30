@@ -1,22 +1,15 @@
 package com.engineeringaitest.ui.adapter;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.engineeringaitest.R;
 import com.engineeringaitest.databinding.RowItemUserBinding;
 import com.engineeringaitest.model.APIResponse;
@@ -96,19 +89,6 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.Item
             try {
                 Glide.with(mActivity)
                         .load(users.getImage()).placeholder(R.drawable.ic_account)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                binding.pbLoader.setVisibility(View.GONE);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                binding.pbLoader.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
                         .into(binding.ivUserPhoto);
             } catch (Exception e) {
                 e.printStackTrace();

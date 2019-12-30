@@ -111,6 +111,7 @@ public class UserImageActivity extends AppCompatActivity {
 
     private void setUserAdapter() {
         if (apiResponse != null && apiResponse.getData().getUsers() != null) {
+            // store offset for next api call
             offset = offset + apiResponse.getData().getUsers().size();
             usersArrayList.addAll(apiResponse.getData().getUsers());
             if (userListAdapter == null) {

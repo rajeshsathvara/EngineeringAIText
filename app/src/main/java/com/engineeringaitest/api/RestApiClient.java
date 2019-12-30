@@ -19,7 +19,7 @@ public class RestApiClient {
 
     private static Retrofit retrofit = null;
     private static final String BASE_URL = "http://sd2-hiring.herokuapp.com/api/";
-    private static final int TIMEOUT = 60 * 3;// minutes
+    private static final int TIMEOUT = 60 * 3; // 3 minutes timeout for api call operation
 
     public static ApiInterface getApiInterface() {
         return createRetrofit().create(ApiInterface.class);

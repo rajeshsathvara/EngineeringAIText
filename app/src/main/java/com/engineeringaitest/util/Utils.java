@@ -1,6 +1,5 @@
 package com.engineeringaitest.util;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -9,14 +8,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
-
 import com.engineeringaitest.R;
 
 public class Utils {
     private static Dialog dialog;
 
-    //print Exception with exception value
     public static void printException(String value, Throwable e) {
         Log.e("!_@_TestExam:", value + "", e);
     }
@@ -59,12 +55,5 @@ public class Utils {
             }
             dialog = null;
         }
-    }
-
-    public static void startGliderProgress(Activity mContext) {
-        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(mContext);
-        circularProgressDrawable.setStrokeWidth(5f);
-        circularProgressDrawable.setCenterRadius(30f);
-        circularProgressDrawable.start();
     }
 }

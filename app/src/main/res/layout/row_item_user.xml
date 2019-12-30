@@ -18,25 +18,14 @@
             android:layout_margin="4dp"
             android:orientation="horizontal">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/ivUserPhoto"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    app:civ_border_color="#FF000000"
-                    app:civ_border_width="1dp" />
-                <ProgressBar
-                    android:id="@+id/pbLoader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:visibility="gone" />
-            </RelativeLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivUserPhoto"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="1dp" />
 
             <TextView
                 android:id="@+id/tvUserName"

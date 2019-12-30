@@ -63,22 +63,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ItemViewHolder
         void bind(String imgUrl) {
             // set values to view
             try {
-                binding.pbLoader.setVisibility(View.VISIBLE);
-                Glide.with(mContext).load(imgUrl).placeholder(R.drawable.ic_loader)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                binding.pbLoader.setVisibility(View.GONE);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                binding.pbLoader.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
-                        .into(binding.postImage);
+                Glide.with(mContext).load(imgUrl).placeholder(R.drawable.ic_loader).into(binding.postImage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
